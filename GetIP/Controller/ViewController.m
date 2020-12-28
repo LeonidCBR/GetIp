@@ -22,24 +22,32 @@
     [super viewDidLoad];
     
     // TODO: - add tableviewcontroller, where sections have names of interfaces and rows are ipaddresses
+    //_textAddresses.text = @"INTERFACES";
     
     Host *host = [Host new];
-    NSArray *addresses = [host getIpAddress];
-    
-    _textAddresses.text = @"IP:\n";
-
-    for (int i=0; i < [addresses count]; i++) {
-        _textAddresses.text = [_textAddresses.text stringByAppendingFormat: @"%@\n", [addresses objectAtIndex:i]];
+    NSDictionary *interfaces = [host getInterfaces];
+    for (NSString *key in interfaces) {
+        _textAddresses.text = [_textAddresses.text stringByAppendingFormat:@"%@:\n", key];
+        NSArray *addresses = [interfaces objectForKey:key];
+        for (NSString *address in addresses) {
+            _textAddresses.text = [_textAddresses.text stringByAppendingFormat:@"\t%@\n", address];
+        }
+//        for (int i=0; i < [addresses count]; i++) {
+//            NSLog(addresses objectAtIndex:<#(NSUInteger)#>)
+//        }
     }
     
-    if (@available(iOS 12.0, *)) {
-        
+//    for (int i=0; i < [interfaces count]; i++) {
+//        _textAddresses.text = [_textAddresses.text stringByAppendingFormat: @"%@\n", [addresses objectAtIndex:i]];
+//    }
+    
+    
+//    if (@available(iOS 12.0, *)) {
 //        _pathMonitor = nw_path_monitor_create();
 //        nw_endpoint_t endpoint = nw_endpoint_create_host("8.8.8.8", "80");
-        
-    } else {
+//    } else {
         // Fallback on earlier versions
-    }
+//    }
     
 
 }

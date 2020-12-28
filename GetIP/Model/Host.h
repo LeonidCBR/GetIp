@@ -10,7 +10,7 @@
 
 @interface Host : NSObject
 
-- (NSArray * _Nullable)getIpAddress;
+- (NSDictionary * _Nullable)getInterfaces;
 
 @end
 
