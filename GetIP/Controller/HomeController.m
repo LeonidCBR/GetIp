@@ -5,6 +5,8 @@
 //  Created by Яна Латышева on 28.12.2020.
 //
 
+#define CELL_IDENTIFIER @"MainCellIdentifier"
+
 #import "HomeController.h"
 #import "Host.h"
 
@@ -17,6 +19,8 @@
 
 @implementation HomeController
 
+// MARK: - Lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -25,14 +29,36 @@
         self.navigationController.navigationBar.prefersLargeTitles = YES;
     }
     
-    // TODO: - refactor
-    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"interfaceCellIdentifier"];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
+    [self configureTableView];
+    [self loadData];
+    [self configureRefreshControl];
+}
+
+
+// MARK: - Methods
+
+- (void)loadData {
     Host *host = [Host new];
     _interfaces = [host getInterfaces];
     _names = host.names;
 //    NSLog(@"%@", _interfaces);
+}
+
+- (void)configureTableView {
+    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:CELL_IDENTIFIER];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+- (void)configureRefreshControl {
+    self.refreshControl = [UIRefreshControl new];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+}
+
+// Pull to refresh
+- (void)refresh {
+    [self loadData];
+    [self.tableView reloadData];
+    [self.refreshControl endRefreshing];
 }
 
 #pragma mark - Table view data source
@@ -51,7 +77,7 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"interfaceCellIdentifier" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER forIndexPath:indexPath];
     
 //    NSInteger section = indexPath.section;
 //    NSInteger row = indexPath.row;
