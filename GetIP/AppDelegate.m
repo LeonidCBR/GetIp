@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "HomeController.h"
 
 @interface AppDelegate ()
 
@@ -15,7 +16,16 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    // Check version of operating system
+        NSOperatingSystemVersion ios13_0_0 = (NSOperatingSystemVersion){13, 0, 0};
+        if (![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios13_0_0]) {
+
+            // Init window only if iOS version below 13.0
+            _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+            _window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[HomeController new]];
+            [_window makeKeyAndVisible];
+        }
     return YES;
 }
 
