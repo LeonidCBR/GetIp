@@ -14,9 +14,6 @@
 @implementation Host
 
 // Get the INTERNAL ip address
-
-// TODO: - return an array
-
 - (NSDictionary * _Nullable)getInterfaces {
     
     NSMutableDictionary *interfaces = [NSMutableDictionary dictionary];
@@ -38,12 +35,12 @@
     currentAddr = addresses;
     while (currentAddr) {
         
-        NSLog(@"Family: %d", currentAddr->ifa_addr->sa_family);
+//        NSLog(@"Family: %d", currentAddr->ifa_addr->sa_family);
         
         if ((currentAddr->ifa_addr) &&
             (currentAddr->ifa_addr->sa_family == AF_INET || currentAddr->ifa_addr->sa_family == AF_INET6))
         {
-            NSLog(@"Interface: %s", currentAddr->ifa_name);
+//            NSLog(@"Interface: %s", currentAddr->ifa_name);
             
             NSString *interfaceName = [NSString stringWithUTF8String:currentAddr->ifa_name];
             if (! [interfaces objectForKey:interfaceName]) {
@@ -64,20 +61,15 @@
                 struct sockaddr_in *ifAddress = (struct sockaddr_in *)currentAddr->ifa_addr;
                 address = [NSString stringWithUTF8String:inet_ntoa(ifAddress->sin_addr)];
                 //address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)currentAddr->ifa_addr)->sin_addr)];
-                NSLog(@"Ip: %@", address);
-                
-                // TODO: - append address to array
-                
-              
-                
-                
+//                NSLog(@"Ip: %@", address);
+   
             } else {
                 
                 // AF_INET6
                 struct sockaddr_in6 *ifAddress6 = (struct sockaddr_in6 *)currentAddr->ifa_addr;
                 inet_ntop(AF_INET6, &ifAddress6->sin6_addr, addr, sizeof(addr));
                 address = [NSString stringWithUTF8String:addr];
-                NSLog(@"Ip: %@", address);
+//                NSLog(@"Ip: %@", address);
                 
            
             }
@@ -85,7 +77,7 @@
             NSMutableArray *currentAddresses = [interfaces objectForKey:interfaceName];
             [currentAddresses addObject:address];
 //            [arrAddresses addObject:address];
-            NSLog(@"hop");
+
         }
         
         currentAddr = currentAddr->ifa_next;
@@ -97,9 +89,15 @@
     
     //NSArray *resultAddresses = [arrAddresses copy];
     //return resultAddresses;
-    NSDictionary *result = [interfaces copy];
-    return result;
+//    NSDictionary *result = [interfaces copy];
+//    return result;
+    _interfaces = [interfaces copy];
     
+//    NSMutableArray *listOfNames = [NSMutableArray array];
+//    for (NSString *name in _interfaces.allKeys)
+    _names = _interfaces.allKeys;
+    
+    return _interfaces;
 }
 
 

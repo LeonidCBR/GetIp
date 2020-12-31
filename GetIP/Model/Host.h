@@ -10,6 +10,9 @@
 
 @interface Host : NSObject
 
+@property (strong, nonatomic) NSDictionary * _Nullable interfaces;
+@property (strong, nonatomic) NSArray * _Nullable names;
+
 - (NSDictionary * _Nullable)getInterfaces;
 
 @end
